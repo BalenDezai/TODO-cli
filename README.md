@@ -13,14 +13,14 @@
 
 
 #Intro
- < directory to check for: ~/
- < type of files: .xyz
- > TODOs:
- > ---------------------------
- >  ~/file.xyz:13  TODO make this program
- > nice and friendly to use.
- > ~/alt.xyz:22 TODO give colouring to
- > text
+ + directory to check for: ~/
+ + type of files: .xyz
+ + TODOs:
+ + ---------------------------
+ +  ~/file.xyz:13  TODO make this program
+ + nice and friendly to use.
+ + ~/alt.xyz:22 TODO give colouring to
+ + text
 
 
 #About
