@@ -1,8 +1,8 @@
-#   this module is for the handling of command arguements and the commands
+#   this module is for the handling of command arguments and the commands
 
 
-def commandInterpreter(sysargs=[]):
-    if len(sysargs) == 2:
-        arrResult = []
-        arrResult.append(sysargs[1])
-        return arrResult
+def command_interpreter(sysargs=[]):
+    arr_result = []
+    while len(sysargs) >=2:
+        arr_result.append(sysargs.pop(1))
+    return arr_result

@@ -8,9 +8,9 @@ from lib import writer
 
 def main():
     # TODO: Use '-' to read from stdin instead
-    filenames = commands.commandInterpreter(sys.argv)
-    comments = reader.readFiles(filenames)
-    writer.printOut(comments)
+    filenames = commands.command_interpreter(sys.argv)
+    comments = reader.read_files(filenames)
+    writer.print_out(comments)
 
 if __name__ == "__main__":
     main()
