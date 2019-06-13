@@ -12,5 +12,6 @@ def main():
     comments = reader.read_files(arguemetnObj)
     writer.print_out(comments)
 
+
 if __name__ == "__main__":
     main()
