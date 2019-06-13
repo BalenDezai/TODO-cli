@@ -30,10 +30,14 @@ def get_regex_by_filename(fname):
     return result
 
 
-def read_files(files_to_read=[]):
+def read_files(files_to_read):
     comments = []
-    if len(files_to_read) >= 1:
-        for fname in files_to_read:
+    print(files_to_read)
+    if files_to_read.isFolder:
+        #TODO:  add for folder
+        return comments
+    else:
+        for fname in files_to_read.names:
             linenum = 0
             file = open(fname, "r")
             regex_list = get_regex_by_filename(fname)
