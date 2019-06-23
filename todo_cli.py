@@ -8,8 +8,8 @@ from lib import writer
 
 def main():
     # TODO: Use '-' to read from stdin instead
-    arguemetnObj = commands.command_interpreter()
-    comments = reader.read_files(arguemetnObj)
+    argument_obj = commands.command_interpreter()
+    comments = reader.read_files(argument_obj)
     writer.print_out(comments)
 
 
