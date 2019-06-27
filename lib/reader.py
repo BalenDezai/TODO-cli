@@ -11,38 +11,38 @@ POUNDSIGN_REGEX = re.compile(r"#\s*(TODO.*)", re.IGNORECASE)
 DOUBLESLASH_REGEX = re.compile(r"//\s*(TODO.*)", re.IGNORECASE) # Not used yet
 SINGLESLASH_REGEX = re.compile(r"/\*\s*(TODO.*)\s*\*/", re.IGNORECASE)
 
-# plain text regexes for filename extensions
-PYTHON_REGEX_RAW = r".*\.py$"
-C_REGEX_RAW = r".*\.([ch]|cpp)$"
+# Specific file extension constant
+PYTHON_EXT = '.py'
 
-# TODO: use case-sensitive filename regexes in Linux / Mac
-PYTHON_REGEX = re.compile(PYTHON_REGEX_RAW, re.IGNORECASE)
-C_REGEX = re.compile(C_REGEX_RAW, re.IGNORECASE)
 
-# used for checking that a filename is even valid to process, make sure it contains all the above file extensions
-# also make sure all "|" are inside parenthesis for proper combining
-ALL_EXTENSIONS_REGEX = re.compile("|".join([PYTHON_REGEX_RAW, C_REGEX_RAW]), re.IGNORECASE)
-
-def get_regex_by_filename(fname):
-    result = []
+def get_regex_list_by_filename(fname:str):
+    regex_list = []
     # chech for Python extension
-    match = re.search(PYTHON_REGEX, fname)
-    if match:
-        result.append(POUNDSIGN_REGEX)
-        return result
-    # check for C / CPP extension
-    match = re.search(C_REGEX, fname)
-    if match:
-        result.append(DOUBLESLASH_REGEX)
-        result.append(SINGLESLASH_REGEX)
-        return result
+    if fname.lower().endswith(PYTHON_EXT):
+        regex_list.append(POUNDSIGN_REGEX)
+        return regex_list
     # TODO: more file extensions
-    return result
+    else:
+        regex_list.append(DOUBLESLASH_REGEX)
+        regex_list.append(SINGLESLASH_REGEX)
+        return regex_list
 
+def read_comments_in_files(file_names):
+    found_comments = []
+    for fname in file_names:
+        linenum = 0
+        file = open(fname, "r")
+        regex_list = get_regex_list_by_filename(fname)
+        for line in file:
+            linenum += 1
+            for regex in regex_list:
+                match = re.search(regex, line)
+                if match:
+                    found_comments.append(Comment(fname, linenum, match.group(1)))
+        file.close()
+    return found_comments
 
 def read_files(files_to_read):
-    comments = []
-
     # Get correct filenames if we got the dir name instead
     if files_to_read.is_folder:
         folders = files_to_read.names
@@ -59,23 +59,14 @@ def read_files(files_to_read):
             for fname in fnames:
                 if (files_to_read.debug_mode):
                     print(fname)
-                match = re.search(ALL_EXTENSIONS_REGEX, fname)
-                if match:
+                #match = re.search(ALL_EXTENSIONS_REGEX, fname)
+                #if match:
+                    #files.append(fname)
+                if (fname.lower().endswith(tuple(files_to_read.extensions))):
                     files.append(fname)
         files_to_read.names = files
         if (files_to_read.debug_mode):
             print(files_to_read.names)
-
-    # Normal processing
-    for fname in files_to_read.names:
-        linenum = 0
-        file = open(fname, "r")
-        regex_list = get_regex_by_filename(fname)
-        for line in file:
-            linenum += 1
-            for regex in regex_list:
-                match = re.search(regex, line)
-                if match:
-                    comments.append(Comment(fname, linenum, match.group(1)))
-        file.close()
+    
+    comments = read_comments_in_files(files_to_read.names)
     return comments
