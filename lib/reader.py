@@ -43,11 +43,18 @@ def read_comments_in_files(file_names):
     return found_comments
 
 def read_files(files_to_read):
+    
+    # if no file or folder is specified, use current working directory
+    if files_to_read.names is None:
+        files_to_read.names = [os.getcwd()]
+        files_to_read.is_folder = True
+
     # Get correct filenames if we got the dir name instead
     if files_to_read.is_folder:
         folders = files_to_read.names
         files = []
         if (files_to_read.debug_mode):
+            print(folders)
             print("Files found:")
         for folder in folders:
             #   will look through the specified folder and all its sub/child folders
