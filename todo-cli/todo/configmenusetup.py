@@ -54,5 +54,8 @@ class Setup:
         except IOError:
             self.create_config_file_object('', '', '')
             self.print_to_file()
+            with open(self.path_to_store_file) as config_data:
+                data = json.load(config_data)
+                return data
     
     
