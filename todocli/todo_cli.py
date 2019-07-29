@@ -5,13 +5,14 @@ from todo import reader
 from todo import writer
 from todo import config
 from todo import configmenusetup
+import sys
 
 
 # TODO: Not really a TODO, I'm just testing that the program works on itself
 
 def main():
     # TODO: Use '-' to read from stdin instead
-    argument_obj = commands.command_interpreter()
+    argument_obj = commands.command_interpreter(sys.argv[1:])
     if argument_obj.new_config == True:
         setup = configmenusetup.Setup()
         setup.config_setup_menu()

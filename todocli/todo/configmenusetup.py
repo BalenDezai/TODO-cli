@@ -52,7 +52,7 @@ class Setup:
                 data = json.load(config_data)
                 return data
         except IOError:
-            self.create_config_file_object('', '', '')
+            self.create_config_file_object('', None, '')
             self.print_to_file()
             with open(self.path_to_store_file) as config_data:
                 data = json.load(config_data)

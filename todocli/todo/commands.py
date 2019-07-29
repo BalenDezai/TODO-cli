@@ -11,7 +11,7 @@ class BoolArgParser(argparse.Action):
             values = True
             setattr(namespace, self.dest, values)
             
-def command_interpreter():
+def command_interpreter(args):
     parser = argparse.ArgumentParser(
         description='A program that shows all TODO comments in your code.',
         prog='TODOcli'
@@ -24,4 +24,4 @@ def command_interpreter():
     parser.add_argument('-c', '--config', action='store_true', dest='new_config', help='parameter to start new config setup')
     parser.add_argument('-v', '--version', action='version', version='%(prog)s 1.0')
     parser.add_argument('-d', '--debug', action='store_true', dest='debug_mode', help='print debug information') # maybe overkill for a toy program?
-    return parser.parse_args()
+    return parser.parse_args(args)
