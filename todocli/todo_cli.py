@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 
-from todo import commands
+from todo.commands import command_interpreter
 from todo import reader
 from todo import writer
 from todo import config
-from todo import configmenusetup
+from todo.configmenusetup import Setup
+from os.path import dirname, pardir, abspath, join
 import sys
 
 
@@ -12,14 +13,17 @@ import sys
 
 def main():
     # TODO: Use '-' to read from stdin instead
-    argument_obj = commands.command_interpreter(sys.argv[1:])
+    current_folder_path = abspath(join(dirname(__file__), 'config.json'))
+    argument_obj = command_interpreter(sys.argv[1:])
     if argument_obj.new_config == True:
-        setup = configmenusetup.Setup()
-        setup.config_setup_menu()
+        setup = Setup(current_folder_path)
+        setup.config_menu_start()
         setup.print_to_file()
     else:
-        setup = configmenusetup.Setup()
-        combined_commands = setup.combine_configurations(vars(argument_obj))
+
+        setup = Setup(current_folder_path)
+        file_config = setup.load_config_from_file()
+        combined_commands = setup.combine_configurations(file_config, vars(argument_obj))
         print(combined_commands)
         # Check that language extensions are defined in config file
         error = False

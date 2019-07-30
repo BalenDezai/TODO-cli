@@ -1,7 +1,7 @@
 import re
 import os
-from todo.comment import Comment
-from todo.config import lang_list
+from .utils.comment import Comment
+from .config import lang_list
 
 #   this is the module to read the files and find the comments in them
 

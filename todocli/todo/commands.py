@@ -1,15 +1,7 @@
 #   this module is for the handling of command arguments and the commands
 import argparse
+from .utils.bool_arg_parser import BoolArgParser
 
-class BoolArgParser(argparse.Action):
-    def __init__(self, option_strings, dest, nargs, **kwargs):
-        super(BoolArgParser, self).__init__(option_strings, dest, nargs, **kwargs)
-    
-    def __call__(self, parser, namespace, values, option_string=None):
-        #print('%r %r %r' % (namespace, values, option_string))
-        if option_string == '-m':
-            values = True
-            setattr(namespace, self.dest, values)
             
 def command_interpreter(args):
     parser = argparse.ArgumentParser(
