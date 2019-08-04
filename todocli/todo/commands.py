@@ -2,7 +2,7 @@
 import argparse
 from .utils.bool_arg_parser import BoolArgParser
 
-            
+
 def command_interpreter(args):
     parser = argparse.ArgumentParser(
         description='A program that shows all TODO comments in your code.',

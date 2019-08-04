@@ -40,7 +40,10 @@ def read_files(files_to_read):
             #   find all the files in the foldeR and sub folders
             #   join the path of the file to the root path
             #   add the file path to the array
-            fnames = [os.path.join(root_dir,file) for root_dir,sub_dir,found_files in os.walk(folder) for file in found_files]
+            try:
+                fnames = [os.path.join(root_dir,file) for root_dir,sub_dir,found_files in os.walk(folder) for file in found_files]
+            except OSError:
+                raise
             # Only add known source code extensions to the list
             for fname in fnames:
                 if (files_to_read.debug_mode):

@@ -36,15 +36,16 @@ class TestCommandparser(object):
     def test_NoFileNameArguement(self):
         assert self.no_args_parsed_args.names is None
 
-    def test_NoExtensionsArguement(self):
+    #   no extension argument
+    def test_NoExtensionsArgument(self):
         assert self.no_args_parsed_args.extensions is None
-        
+    #   no  is_folder argument
     def test_NoIsFolderArguement(self):
         assert self.no_args_parsed_args.is_folder is None
-
+    #   no new_config argument
     def test_NoNewConfigArgeuement(self):
         assert self.no_args_parsed_args.new_config is False
-
+    #   no debug argument
     def test_NoDebugArguement(self):
         assert self.no_args_parsed_args.debug_mode is False
 

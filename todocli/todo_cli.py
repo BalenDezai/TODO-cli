@@ -17,12 +17,18 @@ def main():
     argument_obj = command_interpreter(sys.argv[1:])
     if argument_obj.new_config == True:
         setup = Setup(current_folder_path)
-        setup.config_menu_start()
-        setup.print_to_file()
+        config_obj = setup.config_menu_start()
+        setup.print_to_file(config_obj)
     else:
 
         setup = Setup(current_folder_path)
-        file_config = setup.load_config_from_file()
+        file_config = {}
+        try:
+            file_config = setup.load_config_from_file()
+        except FileNotFoundError:
+            file_config = setup.create_config_object('', None, '')
+            setup.print_to_file(file_config)
+        
         combined_commands = setup.combine_configurations(file_config, vars(argument_obj))
         print(combined_commands)
         # Check that language extensions are defined in config file
