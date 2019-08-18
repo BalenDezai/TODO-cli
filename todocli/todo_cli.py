@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 from todo.commands import command_interpreter
-from todo import reader
+from todo.reader import get_all_dir_files, attach_working_dir, read_comments_in_files
 from todo import writer
 from todo import config
 from todo.configmenusetup import Setup
@@ -42,9 +42,13 @@ def main():
 
         if error:
             return
+        
+        combined_commands = attach_working_dir(combined_commands)
 
+        if combined_commands.is_folder:
+            combined_commands.names = get_all_dir_files(combined_commands.names, combined_commands.debug_mode, combined_commands.extensions)
         # Call the reader if all is good 
-        comments = reader.read_files(combined_commands)
+        comments = read_comments_in_files(combined_commands.names)
         writer.print_out(comments)
 
 
