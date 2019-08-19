@@ -31,7 +31,7 @@ def read_comments_in_files(file_names:list):
         regex_list = lang_list[file_extension].get_compiled_regexes()
         comment_in_file = read_line_in_file(fname, regex_list)
         found_comments.append(create_file_object(fname, comment_in_file))
-    found_comments = filter(None, found_comments)
+    found_comments =  list(filter(None, found_comments))
     return found_comments
 
 def attach_working_dir(commandsObj):

@@ -2,6 +2,8 @@ from todocli.todo.reader import read_comments_in_files, read_line_in_file, creat
 from todocli.todo.utils.comment import Comment
 from todocli.todo.utils.file import File
 from unittest import mock
+import os.path
+import types
 
 class TestReader(object):
     def test_ReadLineInFile(self):
@@ -37,11 +39,25 @@ class TestReader(object):
 
     def test_ReadCommentsInFiles(self):
         file_data = '# TODO: HELLO'
-        files = ['FileOne']
-        extension = ['.py']
+        files = ['FileOne.py']
+        
         open_file_mock = mock.mock_open(read_data=file_data)
-        mock
-        with mock.patch('os.path.splitext.',  lambda x: extension):
-            with mock.patch('todocli.todo.reader.open', open_file_mock, create=True):
-                found_comments = read_comments_in_files(files)
-                assert isinstance(found_comments, list)
+        with mock.patch('todocli.todo.reader.open', open_file_mock, create=True):
+            found_comments = read_comments_in_files(files)
+            assert isinstance(found_comments, list)
+            assert isinstance(found_comments[0], File)
+
+            assert found_comments[0].file_name  == 'FileOne.py'
+            assert found_comments[0].line_and_comment[0].line == 1
+            assert found_comments[0].line_and_comment[0].comment == 'TODO: HELLO'
+
+
+    def test_AttachWorkingDir(self):
+        newDict = dict()
+        setattr(newDict, 'names', None)
+        setattr(newDict, 'is_folder', False)
+        commandsObj = Namespace(**newDict)
+        getcwd_mock = mock.Mock(return_value='CurrentPath')
+        with mock.patch('os.getcwd.', getcwd_mock, create=True):
+            result = attach_working_dir(commandsObj)
+            assert result.names == 'CurentPath'
