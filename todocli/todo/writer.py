@@ -8,4 +8,4 @@ def print_out(comments_to_write_out=[]):
         for comment in comments_to_write_out:
                 print(Fore.RED + comment.filename + ":")
                 for lineandcomment in comment.line_and_comment:
-                        print(Style.RESET_ALL + "\t\t" + str(lineandcomment[0]) + ":\t" + lineandcomment[1]) 
+                        print(Style.RESET_ALL + "\t\t" + str(lineandcomment.line) + ":\t" + lineandcomment.comment) 

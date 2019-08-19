@@ -1,5 +1,6 @@
 from todocli.todo.writer import print_out
-from  todocli.todo.utils.comment import Comment
+from todocli.todo.utils.comment import Comment
+from todocli.todo.utils.file import File
 from io import StringIO
 import sys
 
@@ -9,14 +10,16 @@ class TestWriter(object):
         count = 0
         comments = []
         while count < 2:
-            test = "TODO NUMBER: " + str(count)
-            temp = [(str(count), test)]
-            comments.append(Comment('FileNumber' + str(count), temp))
+            comments.append(File('FileNumber' + str(count), [Comment(str(count), "TODO NUMBER: " + str(count))]))
             count += 1
 
         stringToTest = ''
-        for comment in comments:
-            stringToTest += comment.filename + " " + comment.line_and_comment[0] + ":\t\t" + comment.line_and_comment[1] + "\n"
+        for file in comments:
+            stringToTest += file.filename + ":\n"
+            for comment in file.line_and_comment:
+                stringToTest +=  "\t\t" + str(comment.line) + ":\t" + comment.comment + "\n"
+                
+
 
         capturedOutput = StringIO()
         sys.stdout = capturedOutput

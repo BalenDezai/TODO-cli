@@ -58,7 +58,7 @@ class Setup:
             with open(self.path_to_store_file, 'r') as config_data:
                 data = json.load(config_data)
                 #   if the names property is an empty string, turn it into None instead
-                if not data['names']:
+                if not 'names' in data:
                     data['names'] = None
                 return data
         except FileNotFoundError:

@@ -20,11 +20,6 @@ class TestConfigMenuSetup(object):
     def test_GetFolderOrFileName(self):
         with mock.patch('builtins.input', return_value='fileOrFolderName'):
             assert self.config_setup.__get_folder_or_file_name__() == 'fileOrFolderName'
-
-    #   get folder or file name function
-    def test_GetFolderOrFileName(self):
-        with mock.patch('builtins.input', return_value="fileOrFolderName"):
-            assert self.config_setup.__get_folder_or_file_name__() == 'fileOrFolderName'
         
     #   where is folder is true
     def test_GetIsFolderTrue(self):
@@ -93,6 +88,13 @@ class TestConfigMenuSetup(object):
             assert isinstance(loaded_config['extensions'], list)
             assert loaded_config['extensions'][0] == '.py'
             assert loaded_config['extensions'][1] == '.c'
+
+    def test_LoadConfigFromFileWithoutNameProperty(self):
+        jsonStr = '{"extensions": [".py", ".c"], "is_folder": null}'
+        mocked_file = mock.mock_open(read_data=jsonStr)
+        with mock.patch('todocli.todo.configmenusetup.open', mocked_file, create=True):
+            loaded_config = self.config_setup.load_config_from_file()
+            assert loaded_config['names'] == None
 
     def test_LoadConfigFromFileError(self):
         jsonStr = '{"extensions": [".py", ".c"], "is_folder": null, "names": "FileName"}'

@@ -1,4 +1,4 @@
 class Comment:
-    def __init__(self, filename:str, line_and_comment:list):
-        self.filename = filename
-        self.line_and_comment = line_and_comment
+    def __init__(self, line:int, comment:str):
+        self.line = line
+        self.comment = comment

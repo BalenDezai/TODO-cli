@@ -1,6 +1,7 @@
 import re
 import os
 from .utils.comment import Comment
+from .utils.file import File
 from .config import lang_list
 
 #   this is the module to read the files and find the comments in them
@@ -14,13 +15,13 @@ def read_line_in_file(file_name:str, regex_to_find):
         for regex in regex_to_find:
             match = re.search(regex, line)
             if match:
-                comments.append((linenum, match.group(1)))
+                comments.append(Comment(linenum, match.group(1)))
     file.close()
     return comments
 
 def create_comment_object(file_name:str, comments:list):
     if len(comments) > 0:
-        return Comment(file_name, comments)
+        return File(file_name, comments)
     else:
         return None
 
