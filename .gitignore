@@ -124,3 +124,6 @@ dmypy.json
 #config file
 config.json
 .vscode
+
+#coverage file
+.coverage
