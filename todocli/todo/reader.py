@@ -9,17 +9,16 @@ from .config import lang_list
 def read_line_in_file(file_name:str, regex_to_find):
     comments = []
     linenum = 0
-    file = open(file_name, "r")
-    for line in file:
-        linenum += 1
-        for regex in regex_to_find:
-            match = re.search(regex, line)
-            if match:
-                comments.append(Comment(linenum, match.group(1)))
-    file.close()
+    with open(file_name, 'r') as file:
+        for line in file:
+            linenum += 1
+            for regex in regex_to_find:
+                match = re.search(regex, line)
+                if match:
+                    comments.append(Comment(linenum, match.group(1)))
     return comments
 
-def create_comment_object(file_name:str, comments:list):
+def create_file_object(file_name:str, comments:list):
     if len(comments) > 0:
         return File(file_name, comments)
     else:
@@ -31,7 +30,7 @@ def read_comments_in_files(file_names:list):
         file_extension = os.path.splitext(fname)[1].lower()
         regex_list = lang_list[file_extension].get_compiled_regexes()
         comment_in_file = read_line_in_file(fname, regex_list)
-        found_comments.append(create_comment_object(fname, comment_in_file))
+        found_comments.append(create_file_object(fname, comment_in_file))
     found_comments = filter(None, found_comments)
     return found_comments
 

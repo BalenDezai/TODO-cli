@@ -15,7 +15,7 @@ class TestWriter(object):
 
         stringToTest = ''
         for file in comments:
-            stringToTest += file.filename + ":\n"
+            stringToTest += file.file_name + ":\n"
             for comment in file.line_and_comment:
                 stringToTest +=  "\t\t" + str(comment.line) + ":\t" + comment.comment + "\n"
                 
