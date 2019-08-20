@@ -56,6 +56,12 @@ class TestReader(object):
             assert found_comments[0].line_and_comment[0].line == 1
             assert found_comments[0].line_and_comment[0].comment == 'TODO: HELLO'
 
+    def test_ReadCommentsInFilesThrowing(self):
+        files = ['FileOne']
+        with pytest.raises(KeyError) as error:
+            read_comments_in_files(files)
+        assert error.type is KeyError
+        assert error.value.args == ('extension: ', 'The file type to look in for comment is not supported')
 
     def test_AttachWorkingDir(self):
 
@@ -128,4 +134,4 @@ class TestReader(object):
         walk_mock.side_effect = OSError
         with mock.patch('todocli.todo.reader.os.walk', walk_mock):
             with pytest.raises(OSError):
-                files = get_all_dir_files(files_to_read, debug, extensions)
+                get_all_dir_files(files_to_read, debug, extensions)
