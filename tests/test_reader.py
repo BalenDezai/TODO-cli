@@ -21,7 +21,14 @@ class TestReader(object):
             assert isinstance(result[0], Comment)
             assert result[0].line == 1
             assert result[0].comment == "TODO: HELLO"
-            
+    
+    def test_ReadLieInFilesException(self):
+        file_name = 'TestFile'
+        regex_to_find = [r"#\s*(TODO.*)"]
+        with pytest.raises(FileNotFoundError) as error:
+            read_line_in_file(file_name, regex_to_find)
+        assert error.type is FileNotFoundError
+        assert error.value.args == (2, 'No such file or directory',)
 
     def test_CreateCommentObject(self):
         file_name = 'TestFile'
@@ -61,7 +68,7 @@ class TestReader(object):
         with pytest.raises(KeyError) as error:
             read_comments_in_files(files)
         assert error.type is KeyError
-        assert error.value.args == ('extension: ', 'The file type to look in for comment is not supported')
+        assert error.value.args == (r"No such extension is supported: ''",)
 
     def test_AttachWorkingDir(self):
 

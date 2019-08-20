@@ -9,13 +9,16 @@ from .config import lang_list
 def read_line_in_file(file_name:str, regex_to_find):
     comments = []
     linenum = 0
-    with open(file_name, 'r') as file:
-        for line in file:
-            linenum += 1
-            for regex in regex_to_find:
-                match = re.search(regex, line)
-                if match:
-                    comments.append(Comment(linenum, match.group(1)))
+    try:
+        with open(file_name, 'r') as file:
+            for line in file:
+                linenum += 1
+                for regex in regex_to_find:
+                    match = re.search(regex, line)
+                    if match:
+                        comments.append(Comment(linenum, match.group(1)))
+    except FileNotFoundError:
+        raise
     return comments
 
 def create_file_object(file_name:str, comments:list):
@@ -31,7 +34,7 @@ def read_comments_in_files(file_names:list):
         try:
             regex_list = lang_list[file_extension].get_compiled_regexes()
         except KeyError as error:
-            error.args = [ 'extension: ' + f'{file_extension}','The file type to look in for comment is not supported']
+            error.args = [r"No such extension is supported: '" + f'{file_extension}' + r"'"]
             raise
         comment_in_file = read_line_in_file(fname, regex_list)
         found_comments.append(create_file_object(fname, comment_in_file))
