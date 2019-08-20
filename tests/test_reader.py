@@ -2,14 +2,18 @@ from todocli.todo.reader import read_comments_in_files, read_line_in_file, creat
 from todocli.todo.utils.comment import Comment
 from todocli.todo.utils.file import File
 from unittest import mock
-import os.path
-import types
+from argparse import Namespace
+from io import StringIO
+import os
+import sys
+import pytest
 
 class TestReader(object):
     def test_ReadLineInFile(self):
         file_name = 'TestFile'
         regex_to_find = [r"#\s*(TODO.*)"]
         file_data = '# TODO: HELLO'
+        file_data += '\nEÆREÆLRÆELRERL'
         mocked_file = mock.mock_open(read_data=file_data)
         with mock.patch('todocli.todo.reader.open', mocked_file, create=True):
             result = read_line_in_file(file_name, regex_to_find)
@@ -17,6 +21,7 @@ class TestReader(object):
             assert isinstance(result[0], Comment)
             assert result[0].line == 1
             assert result[0].comment == "TODO: HELLO"
+            
 
     def test_CreateCommentObject(self):
         file_name = 'TestFile'
@@ -53,11 +58,74 @@ class TestReader(object):
 
 
     def test_AttachWorkingDir(self):
-        newDict = dict()
-        setattr(newDict, 'names', None)
-        setattr(newDict, 'is_folder', False)
-        commandsObj = Namespace(**newDict)
+
+        commandsObj = Namespace(names=None, is_folder=False)
         getcwd_mock = mock.Mock(return_value='CurrentPath')
-        with mock.patch('os.getcwd.', getcwd_mock, create=True):
+        with mock.patch('todocli.todo.reader.os.getcwd', getcwd_mock):
             result = attach_working_dir(commandsObj)
-            assert result.names == 'CurentPath'
+            
+            assert result.names[0] == 'CurrentPath'
+            assert result.is_folder == True
+
+    def test_AttachWorkingDirWithNames(self):
+        file_names = 'Folder1'
+        commandsObj = Namespace(names=file_names, is_folder=False)
+        result = attach_working_dir(commandsObj)
+        assert result.names == file_names
+        assert result.is_folder == False
+
+    def test_GetAllDirFiles(self):
+        files_to_read = ['folder1']
+        debug = False
+        extensions = ['.py']
+        walk_mock = mock.Mock()
+        walk_mock.return_value = [
+            ('folder1', ('folder2',), ('folder3',)),
+            ('folder1/folder2', (), ('Hello.c', 'script.py')),
+        ]
+        with mock.patch('todocli.todo.reader.os.walk', walk_mock):
+            files = get_all_dir_files(files_to_read, debug, extensions)
+            
+            assert isinstance(files, list)
+
+            assert files[0] ==  os.path.join('folder1/folder2', 'script.py')
+            walk_mock.assert_called_with('folder1')
+
+
+    def test_GetAllDirFilesWithDebug(self):
+        files_to_read = ['folder1']
+        debug = True
+        extensions = ['.py']
+        walk_mock = mock.Mock()
+        walk_mock.return_value = [
+            ('folder1', ('folder2',), ('folder3',)),
+            ('folder1/folder2', (), ('Hello.c', 'script.py')),
+        ]
+        with mock.patch('todocli.todo.reader.os.walk', walk_mock):
+            capturedOutput = StringIO()
+            sys.stdout = capturedOutput
+            files = get_all_dir_files(files_to_read, debug, extensions)
+            
+            walk_mock.assert_called_with('folder1')
+            sys.stdout = sys.__stdout__
+
+            assert isinstance(files, list)
+
+            assert files[0] ==  os.path.join('folder1/folder2', 'script.py')
+            str_to_test = f'{files_to_read}\n'
+            str_to_test += 'Files found:\n'
+            str_to_test += r'folder1\folder3' + '\n'
+            str_to_test += r'folder1/folder2\Hello.c' + '\n'
+            str_to_test += r'folder1/folder2\script.py' + '\n'
+            str_to_test += f'{files}\n'
+            assert capturedOutput.getvalue() == str_to_test
+
+    def test_GetAllDirFilesException(self):
+        files_to_read = ['folder1']
+        debug = True
+        extensions = ['.py']
+        walk_mock = mock.Mock()
+        walk_mock.side_effect = OSError
+        with mock.patch('todocli.todo.reader.os.walk', walk_mock):
+            with pytest.raises(OSError):
+                files = get_all_dir_files(files_to_read, debug, extensions)

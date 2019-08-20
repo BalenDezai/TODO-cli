@@ -19,10 +19,8 @@ class TestWriter(object):
             for comment in file.line_and_comment:
                 stringToTest +=  "\t\t" + str(comment.line) + ":\t" + comment.comment + "\n"
                 
-
-
         capturedOutput = StringIO()
         sys.stdout = capturedOutput
         print_out(comments)
         sys.stdout = sys.__stdout__
-        assert capturedOutput.getvalue() ==  stringToTest
+        assert capturedOutput.getvalue() == stringToTest

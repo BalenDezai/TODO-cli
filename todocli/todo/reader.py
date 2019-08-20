@@ -28,7 +28,11 @@ def read_comments_in_files(file_names:list):
     found_comments = []
     for fname in file_names:
         file_extension = os.path.splitext(fname)[1].lower()
-        regex_list = lang_list[file_extension].get_compiled_regexes()
+        try:
+            regex_list = lang_list[file_extension].get_compiled_regexes()
+        except KeyError as error:
+            error.args = [ 'extension: ' + f'{file_extension}','The file type to look in for comment is not supported']
+            raise
         comment_in_file = read_line_in_file(fname, regex_list)
         found_comments.append(create_file_object(fname, comment_in_file))
     found_comments =  list(filter(None, found_comments))
@@ -41,8 +45,7 @@ def attach_working_dir(commandsObj):
         commandsObj.is_folder = True
     return commandsObj
 
-def get_all_dir_files(files_to_read:str, debug:bool, extensions:list):
-    folders = files_to_read
+def get_all_dir_files(folders:list, debug:bool, extensions:list):
     files = []
     if (debug):
         print(folders)
@@ -62,9 +65,9 @@ def get_all_dir_files(files_to_read:str, debug:bool, extensions:list):
                 print(fname)
             if (fname.lower().endswith(tuple(extensions))):
                 files.append(fname)
-    #files_to_read.names = files
+
     if (debug):
-        print(files_to_read.names)
+        print(files)
     
     #comments = read_comments_in_files(files_to_read.names)
     return files
