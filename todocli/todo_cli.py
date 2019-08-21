@@ -11,45 +11,62 @@ import sys
 
 # TODO: Not really a TODO, I'm just testing that the program works on itself
 
-def main():
-    # TODO: Use '-' to read from stdin instead
-    current_folder_path = abspath(join(dirname(__file__), 'config.json'))
-    argument_obj = command_interpreter(sys.argv[1:])
-    if argument_obj.new_config == True:
-        setup = Setup(current_folder_path)
-        config_obj = setup.config_menu_start()
-        setup.print_to_file(config_obj)
-    else:
+def get_config_file_path(current_file_path:str):
+    return abspath(join(dirname(current_file_path), 'config.json'))
 
-        setup = Setup(current_folder_path)
-        file_config = {}
+def start_new_config_menu(path_to_config_file:str):
+    setup = Setup(path_to_config_file)
+    config_obj = setup.config_menu_start()
+    setup.print_to_file(config_obj)
+
+def load_config_or_make_new(setup:Setup):
+    file_config = {}
+    try:
+        file_config = setup.load_config_from_file()
+    except FileNotFoundError:
+        file_config = setup.create_config_object('', None, '')
+        setup.print_to_file(file_config)
+    return file_config
+
+def check_extension_exists(extensions:list):
+    # Check that language extensions are defined in config file
+    for extension in extensions:
         try:
-            file_config = setup.load_config_from_file()
-        except FileNotFoundError:
-            file_config = setup.create_config_object('', None, '')
-            setup.print_to_file(file_config)
-        
-        combined_commands = setup.combine_configurations(file_config, vars(argument_obj))
-        print(combined_commands)
-        # Check that language extensions are defined in config file
-        error = False
-        for extension in combined_commands.extensions:
-            try:
-                config.lang_list[extension]
-            except KeyError:
-                print("ERROR:\t\"" + extension + "\" is not a recognized extension in the config file")
-                error = True
+            config.lang_list[extension]
+        except KeyError as e:
+            e.args = ["ERROR:\t\"" + extension + "\" is not a recognized extension in the config file"]
+            raise
 
-        if error:
-            return
-        
-        combined_commands = attach_working_dir(combined_commands)
+def main():
+    try:
+        # TODO: Use '-' to read from stdin instead
+        current_folder_path = get_config_file_path(__file__)
 
-        if combined_commands.is_folder:
-            combined_commands.names = get_all_dir_files(combined_commands.names, combined_commands.debug_mode, combined_commands.extensions)
-        # Call the reader if all is good 
-        comments = read_comments_in_files(combined_commands.names)
-        writer.print_out(comments)
+        argument_obj = command_interpreter(sys.argv[1:])
+
+        if argument_obj.new_config == True:
+            start_new_config_menu(current_folder_path)
+        else:
+
+            setup = Setup(current_folder_path)
+            
+            file_config = load_config_or_make_new(setup)
+            
+            combined_commands = setup.combine_configurations(file_config, vars(argument_obj))
+
+            check_extension_exists(combined_commands.extensions)
+
+            combined_commands = attach_working_dir(combined_commands)
+
+            if combined_commands.is_folder:
+                combined_commands.names = get_all_dir_files(combined_commands.names, combined_commands.debug_mode, combined_commands.extensions)
+
+            # Call the reader if all is good 
+            comments = read_comments_in_files(combined_commands.names)
+            writer.print_out(comments)
+    except Exception as error:
+        print(error.args)
+        sys.exit()
 
 
 if __name__ == "__main__":
