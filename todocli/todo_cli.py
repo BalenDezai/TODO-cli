@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 
-from todo.commands import command_interpreter
-from todo.reader import get_all_dir_files, attach_working_dir, read_comments_in_files
-from todo import writer
-from todo import config
-from todo.configmenusetup import Setup
+from todocli.todo.commands import command_interpreter
+from todocli.todo.reader import get_all_dir_files, attach_working_dir, read_comments_in_files
+from todocli.todo import writer
+from todocli.todo import config
+from todocli.todo.configmenusetup import Setup
 from os.path import dirname, pardir, abspath, join
 import sys
 
@@ -14,8 +14,7 @@ import sys
 def get_config_file_path(current_file_path:str):
     return abspath(join(dirname(current_file_path), 'config.json'))
 
-def start_new_config_menu(path_to_config_file:str):
-    setup = Setup(path_to_config_file)
+def start_new_config_menu(setup:Setup):
     config_obj = setup.config_menu_start()
     setup.print_to_file(config_obj)
 
@@ -43,11 +42,10 @@ def main():
         current_folder_path = get_config_file_path(__file__)
 
         argument_obj = command_interpreter(sys.argv[1:])
-
         if argument_obj.new_config == True:
-            start_new_config_menu(current_folder_path)
+            setup = Setup(current_folder_path)
+            start_new_config_menu(setup)
         else:
-
             setup = Setup(current_folder_path)
             
             file_config = load_config_or_make_new(setup)
@@ -67,7 +65,3 @@ def main():
     except Exception as error:
         print(error.args)
         sys.exit()
-
-
-if __name__ == "__main__":
-    main()

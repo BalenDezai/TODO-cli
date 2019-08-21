@@ -3,7 +3,7 @@
 branch = True
 
 source =
-    ./
+    ./todocli
 
 omit = 
     *__init__*

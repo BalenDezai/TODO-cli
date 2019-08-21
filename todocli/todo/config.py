@@ -25,5 +25,6 @@ lang_list = {
     ".py": Lang("Python", [POUNDSIGN_REGEX]),
     ".c": Lang("C", [DOUBLESLASH_REGEX, SINGLESLASH_REGEX]),
     ".cpp": Lang("C++", [DOUBLESLASH_REGEX, SINGLESLASH_REGEX]),
-    ".h": Lang("C/C++ header files", [DOUBLESLASH_REGEX, SINGLESLASH_REGEX])
+    ".h": Lang("C/C++ header files", [DOUBLESLASH_REGEX, SINGLESLASH_REGEX]),
+    ".cs": Lang("C#", [DOUBLESLASH_REGEX])
 }
