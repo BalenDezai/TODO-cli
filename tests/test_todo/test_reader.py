@@ -23,7 +23,7 @@ class TestReader(object):
             assert result[0].comment == "TODO: HELLO"
     
     def test_ReadLieInFilesException(self):
-        file_name = 'TestFile'
+        file_name = 'TestFileNotEixisting'
         regex_to_find = [r"#\s*(TODO.*)"]
         with pytest.raises(FileNotFoundError) as error:
             read_line_in_file(file_name, regex_to_find)

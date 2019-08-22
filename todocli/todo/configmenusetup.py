@@ -50,7 +50,7 @@ class Setup:
     def combine_configurations(self, file_config_obj:dict, input_config_obj:dict):
         config_object_cleaned = clean_object_none_values(input_config_obj)
         combined_config = combine_two_objects(file_config_obj, config_object_cleaned)
-
+        
         return Namespace(**combined_config)
     
     def load_config_from_file(self):

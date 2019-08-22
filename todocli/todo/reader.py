@@ -43,7 +43,7 @@ def read_comments_in_files(file_names:list):
 
 def attach_working_dir(commandsObj):
     # if no file or folder is specified, use current working directory
-    if commandsObj.names is None:
+    if commandsObj.names is None or not commandsObj.names :
         commandsObj.names = [os.getcwd()]
         commandsObj.is_folder = True
     return commandsObj
