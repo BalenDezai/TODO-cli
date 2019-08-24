@@ -7,6 +7,10 @@ setup(
     name="",
     version="0.0,1",
     author="BalenD",
+    scripts=['bin/todo-cli.py'],
+    entry_points = {
+        'console_scripts': ['todo-cli=todocli.todo_cli:main'],
+    },
     author_email="Balen1996@hotmail.com",
     description="CLI that shows all TODO comments in your files",
     long_description=long_description,

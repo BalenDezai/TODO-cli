@@ -7,3 +7,4 @@ source =
 
 omit = 
     *__init__*
+    *tests*

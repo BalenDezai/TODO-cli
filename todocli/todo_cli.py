@@ -79,3 +79,6 @@ def todo_cli_main(args:list):
     except Exception as error:
         print(error.args)
         sys.exit(1)
+
+def main():
+    todo_cli_main(sys.argv[1:])

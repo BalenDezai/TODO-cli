@@ -148,11 +148,10 @@ class TestMain(object):
                 with pytest.raises(SystemExit) as err:
                     todo_cli_main(args)
 
-                    start_new_config_menu_mock.assert_called_once()
-                    get_config_file_path_mock.assert_called_once()
-                    
-                assert err.type == SystemExit
-                assert err.value.args[0] == 0
+        assert err.type == SystemExit
+        assert err.value.args[0] == 0
+        start_new_config_menu_mock.assert_called_once()
+        get_config_file_path_mock.assert_called_once()
 
         
     def test_TodoCliMainNoConfig(self):
@@ -193,6 +192,8 @@ class TestMain(object):
         assert err.type == SystemExit
         assert err.value.args[0] == 1
 
-
-
-        
+    def test_main(self):
+        main_mock = mock.Mock()
+        with mock.patch('todocli.todo_cli.todo_cli_main', main_mock):
+            main()
+        main_mock.assert_called_once()
