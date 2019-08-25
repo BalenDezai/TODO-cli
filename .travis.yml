@@ -6,6 +6,7 @@ matrix:
       env: TOXENV=py37
 
 install:
+    - pip install codecov
     - pip install pytest
     - pip install pytest-cov
     - pip install tox
@@ -14,3 +15,6 @@ script: tox
 
 notifications:
   email: false
+
+after_success:
+    - codecov
