@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.com/BalenD/TODO-cli.svg?branch=master)](https://travis-ci.com/BalenD/TODO-cli)
 <h1 align="center">
   <br>
   TODO-cli
