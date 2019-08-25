@@ -12,7 +12,7 @@ setup(
         'console_scripts': ['todo-cli=todocli.todo_cli:main'],
     },
     install_requires=[
-        'colorama',
+        'colorama'
     ],
     author_email="Balen1996@hotmail.com",
     description="CLI that shows all TODO comments in your files",
