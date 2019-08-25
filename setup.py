@@ -4,7 +4,7 @@ with open('README.md', 'r') as ld:
     long_description = ld.read()
 
 setup(
-    name="",
+    name="todoscli",
     version="0.0,1",
     author="BalenD",
     scripts=['bin/todo-cli.py'],
