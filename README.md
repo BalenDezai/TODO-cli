@@ -14,11 +14,11 @@
 </p>
 
 
-<h1 style="color:red" align="center" id="#about">About</h1>
+<h1 align="center" id="#about">About</h1>
 
 This project is about making a console program that will read every "TODO" mark in your file(s), and print out all of them in the terminal so you can begin working on them.
 
-<h1 style="color:red" align="center" id="#install">Install</h1>
+<h1 align="center" id="#install">Install</h1>
 
 Installing the cli is very simple. Simply run the command
 
@@ -27,7 +27,7 @@ Installing the cli is very simple. Simply run the command
 $ pip install commenttodo
 ```
 
-<h1 style="color:red" align="center" id="#usage">Usage</h1>
+<h1 align="center" id="#usage">Usage</h1>
 
 ## Commands
 
@@ -62,20 +62,20 @@ Will check every .py and .cs file in the "Tests" folder path for comments
 
 ```bash
 # install
-$ todo-cli -c
-```
-will start a new configuration menu
-
-```bash
-# install
 $ todo-cli -v
 ```
 will show version
 
 
+<h1 align="center" id="#config">configuration menu</h1>
+The configuration simply allows you to store the commands once, and run the CLI without needing any commands.
+
+## Examples
+
 ```bash
 # install
-$ todo-cli -e .py
+$ todo-cli -c
 ```
+will start a new configuration menu
 
-<h1 style="color:red" align="center" id="#config">config</h1>
+However note, commands used while running the CLI will take priority over commands from the config file
