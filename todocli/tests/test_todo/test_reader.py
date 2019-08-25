@@ -121,17 +121,15 @@ class TestReader(object):
             
             walk_mock.assert_called_with('folder1')
             sys.stdout = sys.__stdout__
-
+            result = capturedOutput.getvalue() 
             assert isinstance(files, list)
 
             assert files[0] ==  os.path.join('folder1/folder2', 'script.py')
-            str_to_test = f'{files_to_read}\n'
-            str_to_test += 'Files found:\n'
-            str_to_test += r'folder1\folder3' + '\n'
-            str_to_test += r'folder1/folder2\Hello.c' + '\n'
-            str_to_test += r'folder1/folder2\script.py' + '\n'
-            str_to_test += f'{files}\n'
-            assert capturedOutput.getvalue() == str_to_test
+            assert 'folder1' in result
+            assert 'folder2' in result
+            assert 'folder3' in result
+            assert 'Hello.c' in result
+            assert 'script.py' in result
 
     def test_GetAllDirFilesException(self):
         files_to_read = ['folder1']
