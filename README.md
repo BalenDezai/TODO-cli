@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.com/BalenD/TODO-cli.svg?branch=master)](https://travis-ci.com/BalenD/TODO-cli)
+[![codecov](https://codecov.io/gh/BalenD/TODO-cli/branch/master/graph/badge.svg)](https://codecov.io/gh/BalenD/TODO-cli)
 <h1 align="center">
   <br>
   TODO-cli
